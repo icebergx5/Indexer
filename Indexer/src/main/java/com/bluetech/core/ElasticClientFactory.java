@@ -7,8 +7,6 @@ package com.bluetech.core;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.elasticsearch.client.transport.TransportClient;
@@ -26,18 +24,11 @@ public class ElasticClientFactory {
     private static String yaml = "elasticsearch.yml";
     
     public static ElasticClient create(String clusterName, String[] serverAddresses) {
-
-//      Settings settings = ImmutableSettings.settingsBuilder().put("client.transport.sniff", true).put("cluster.name", clusterName).build();
-//      TransportClient transportClient = new TransportClient(settings);
-
-//      Settings settings = Settings.builder().build();
-//      TransportClient transportClient = new PreBuiltTransportClient(settings);
-
-        
+    
         TransportClient transportClient  =  null;
         try {
             Settings.Builder builder = Settings.builder().loadFromStream(yaml, ElasticClientFactory.class.getClassLoader().getResourceAsStream(yaml));
-                   // .put("client.transport.sniff", true)
+                   // .put("client.transport.sniff", true) // Bu hata attırıyor.
                    // .put("client.transport.ignore_cluster_name", true);
             if(! Strings.isEmpty(clusterName)){
                 builder.put("cluster.name", clusterName);

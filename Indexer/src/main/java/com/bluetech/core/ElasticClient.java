@@ -70,9 +70,7 @@ public class ElasticClient {
         }
 
         BulkResponse responses = bulkRequestBuilder.execute().actionGet(10, TimeUnit.SECONDS);
-        
-        //BulkResponse responses = bulkRequestBuilder.get();
-        
+
         if (responses.hasFailures()) {
             logger.error("index failed:" + responses.buildFailureMessage());
             return false;
@@ -206,7 +204,26 @@ public class ElasticClient {
                 .pageSize(originalLimit);
     }
     
+    public Map<String, Object> queryFirst(Query query) {
+        try {
+            SearchRequestBuilder srb = query.buildSearch(client);
+            return transformFirst(srb);
+        } catch (Throwable e) {
+            throw new ElasticeException(e);
+        }
+    } 
      
+    protected Map<String, Object> transformFirst(SearchRequestBuilder builder) throws Exception {
+        SearchResponse searchResponse = builder.execute().actionGet();
+        Map<String, Object> result = null;
+        if (searchResponse.getHits().hits().length > 0) {
+            SearchHit hit = searchResponse.getHits().hits()[0];
+            result = hit.getSource();
+            result.put(ElasticClient.ID, hit.id());
+        }
+        return result;
+    } 
+    
     public boolean close(){
         client.close();
         return true;

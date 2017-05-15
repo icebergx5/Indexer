@@ -20,22 +20,32 @@ package com.bluetech.parser;
  * @author yasin
  */
 public class IndexPart {
-    private int page;
-    private int book;
+    private String page;
+    private String book;
+    private String text;
 
-    public int getPage() {
+    public String getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(String page) {
         this.page = page;
     }
 
-    public int getBook() {
+    public String getBook() {
         return book;
     }
 
-    public void setBook(int book) {
+    public void setBook(String book) {
         this.book = book;
     }
+    
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+    
 }

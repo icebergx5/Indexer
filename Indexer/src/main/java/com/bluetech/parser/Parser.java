@@ -23,9 +23,7 @@ import java.util.List;
  * @author yasin
  */
 public class Parser {
-    
-    
-    
+
     private static int charArrayToInt(char []data,int start,int end) throws NumberFormatException{
         int result = 0;
         for (int i = start; i < end; i++)
@@ -38,40 +36,66 @@ public class Parser {
         return result;
     }
     
+     private static String charArrayToString(char []data,int start, int end) throws NumberFormatException{
+        List<Character> textBetweenTwoNum = new ArrayList<>();
+        char c = data[start];
+        int cInt = (int)c;
+        
+        while(cInt != end){
+            textBetweenTwoNum.add(c);
+            c = data[++start];
+            cInt = (int)c;
+        }
+
+        return charListToString(textBetweenTwoNum);
+    }
+    
+    private static String charListToString(List<Character> textBetweenTwoNum){
+        StringBuilder builder = new StringBuilder(textBetweenTwoNum.size());
+        for(Character chars: textBetweenTwoNum){
+            builder.append(chars);
+        }
+       return builder.toString();
+    }
     
     public static List<IndexPart> parse(String text){
-        List<IndexPart> list = new ArrayList<IndexPart>();
+        List<IndexPart> list = new ArrayList<>();
         
         
         char[] toCharArray = text.toCharArray();
-            
+        List<Character> textBetweenTwoNum = new ArrayList<>();
+        boolean textOrNum = false;
+        IndexPart io = new IndexPart();
+        
         for (int i = 0; i < toCharArray.length; i++) {
             char ch = toCharArray[i];
-            IndexPart io = new IndexPart();
-
-            
-            if(ch =='#' || toCharArray[i+1] == '#'){
+ 
+            if(ch =='#' && toCharArray[i+1] == '#'){
                 
-               int start = i + 2;
-               int end = i + 6;
+               if (textBetweenTwoNum.size() > 0){
+                io.setText(charListToString(textBetweenTwoNum));
+                list.add(io);
+                textBetweenTwoNum = new ArrayList<>();
+                textOrNum = false;
+                io = new IndexPart();
+               }
+      
+               String book = charArrayToString(toCharArray, i + 2, 95); // 95 = '_'
+               i += 2 + book.length() + 1; // basllangic + kitap no uzunlugu + '_' uzunlugu
                
-               int book = charArrayToInt(toCharArray, start, end );
-               
-               
-               start = i + 8;
-               end = i + 11;
-               int page = charArrayToInt(toCharArray, start, end );
-               
+               String pageNoStr = charArrayToString(toCharArray, i, 10); // 10 = nl
+               i += pageNoStr.length() + 1;// basllangic + sayfa no uzunlugu + nl
+              
                io.setBook(book);
-               io.setPage(page);
-               
-               
-               i+=11;
+               io.setPage(pageNoStr);
+
+               textOrNum = true;
+               ch = toCharArray[i];
             }
                 
-            System.out.print(ch);
-            
-            list.add(io);
+            if(textOrNum){
+                textBetweenTwoNum.add(ch);
+            }
         }
         
         return list;

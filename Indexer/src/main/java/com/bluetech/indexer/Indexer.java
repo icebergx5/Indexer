@@ -5,6 +5,7 @@
  */
 package com.bluetech.indexer;
 
+import com.bluetech.converter.IndexConverter;
 import com.bluetech.core.ElasticClient;
 import com.bluetech.core.ElasticClientFactory;
 import com.bluetech.core.IndexObject;
@@ -24,22 +25,19 @@ import java.util.List;
 public class Indexer {
     
     private static String test_index = "test_search";
-    private String mainPath = "/home/yasin/NetBeansProjects/Indexer/Indexer/Test";
-
+    private String mainPath = "/home/yasin/NetBeansProjects/Indexer/Indexer/Test/test1";
+    private static String indexName = "mehaz_index";
+    
     public Indexer() {
-        
         
     }
 
-  
-    
-    
-    
     public static void main(String[] args) throws IOException {
-       /*
+       
        String[] hosts = {"127.0.0.1:9300"};
+       
        ElasticClient client =  ElasticClientFactory.create("mehaz", hosts);
-        
+       /*
        IndexObject indexObject = new IndexObject("1");
 
        indexObject.field("name", "aaaa");
@@ -52,18 +50,18 @@ public class Indexer {
        client.close();
        */
        Indexer indexer = new Indexer();
-       ArrayList<File> files = new ArrayList<File>();
+       ArrayList<File> files = new ArrayList<>();
        FolderReader.listfiles(indexer.getMainPath(), files);
        
        // Read All files
        for (File file : files) {
-            System.out.println("com.bluetech.indexer.Indexer.main(): "+ file.getName()+ " path: "+ file.getCanonicalPath() );
+            System.out.println("com.bluetech.indexer.Indexer.main():  Dosya ismi: "+ file.getName()+ " path: "+ file.getCanonicalPath() );
            
             String textInWord = WordReader.readWordDoc(file.getCanonicalPath());
             List<IndexPart> IndexList = Parser.parse(textInWord);
+            List<IndexObject> indexObjects = IndexConverter.convert(IndexList);
             
-            
-            
+            client.index(indexName, indexObjects);
             
        }
        

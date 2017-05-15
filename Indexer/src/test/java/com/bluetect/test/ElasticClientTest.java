@@ -77,7 +77,7 @@ public class ElasticClientTest {
 
     }
 
-//    @Test
+    @Test
     public void test_queryFirst() throws InterruptedException {
         index(1000);
 
@@ -92,11 +92,13 @@ public class ElasticClientTest {
 
     }
     
-    @Test
+ //   @Test
     public void test_queryList() throws InterruptedException {
-     //   index(1000);
+        index(1000);
 
-        List<Map<String, Object>> list = elasticClient.queryList(new Query(test_index).eq("group", "coder").limit(0, 5).orderByAsc("name"));
+        List<Map<String, Object>> list = elasticClient.queryList(new Query(test_index).eq("group", "coder")
+                .limit(0, 5)
+                .orderByAsc("name"));
 
         Assert.assertEquals(5, list.size());
         int id = 0;

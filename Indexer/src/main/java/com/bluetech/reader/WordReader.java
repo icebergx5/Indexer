@@ -37,7 +37,7 @@ public class WordReader {
         XWPFDocument document = new XWPFDocument(fis);
         XWPFWordExtractor extractor = new XWPFWordExtractor(document);
         // String[] fileData = extractor.getText().split("##\\d{4}[_]\\d{4}[a-z]*");
-       
+        
         return extractor.getText();
     }
     

@@ -23,6 +23,7 @@ public class IndexPart {
     private String page;
     private String book;
     private String text;
+    private String arabicText;
 
     public String getPage() {
         return page;
@@ -46,6 +47,14 @@ public class IndexPart {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getArabicText() {
+        return arabicText;
+    }
+
+    public void setArabicText(String arabicText) {
+        this.arabicText = arabicText;
     }
     
 }

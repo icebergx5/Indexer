@@ -37,6 +37,7 @@ public class IndexConverter {
             object.field("book", part.getBook());
             object.field("page", part.getPage());
             object.field("text", part.getText());
+            object.field("arabicText", part.getArabicText());
             
             indexes.add(object);
         }

@@ -16,7 +16,10 @@
 package com.bluetech.parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -73,7 +76,22 @@ public class Parser {
             if(ch =='#' && toCharArray[i+1] == '#'){
                 
                if (textBetweenTwoNum.size() > 0){
-                io.setText(charListToString(textBetweenTwoNum));
+                
+                String textPart = charListToString(textBetweenTwoNum);   
+                   
+//                String arr = textPart.matches("\\P{InArabic}+");
+                
+              // String arabic = textPart.replaceAll("\\P{InArabic}+","");
+                String arabic = textPart.replaceAll("[^[\\P{InArabic}\\p{P}\\p{Digit}]]+","");
+                
+                
+                
+          
+                io.setArabicText(arabic);
+                
+
+//                io.setArabicText(arabic); 
+                io.setText(textPart);
                 list.add(io);
                 textBetweenTwoNum = new ArrayList<>();
                 textOrNum = false;
